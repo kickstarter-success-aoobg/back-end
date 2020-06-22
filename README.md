@@ -1,8 +1,11 @@
 # Kickstarter Success API Documentation
 
-# Installation and Startup
+# Installation
 
 > npm install
+
+# Startup
+
 > npm run server
 
 # Endpoints
@@ -19,7 +22,7 @@
 
 ##### Expects the following object to be sent
 
-`{ "username": "string", "password": "string" }`
+`{ username: "string", password: "string" }`
 
 ##### If successful, returns User ID and Username.
 
@@ -31,6 +34,6 @@
 
 ##### Expects the following object to be sent
 
-`{ "username": "string", "password": "string" }`
+`{ username: "string", password: "string" }`
 
 ##### If successful, returns generated Token.
