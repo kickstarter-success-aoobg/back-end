@@ -1,14 +1,17 @@
-const bcrypt = require('bcryptjs');
+const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const router = require('express').Router();
+const Users = require('../users/model');
+
+const { isValid } = require('../users/users-service');
 
 const constants = require('../config/constants');
 
 router.post('/register', (req, res) => {
 	const credentials = req.body;
 	const hash_rounds = process.env.HASH_ROUNDS || 10;
-	const hash = bcrypt.hashSync(credentials.password, hash_rounds);
+	const hash = bcryptjs.hashSync(credentials.password, hash_rounds);
 
 	credentials.password = hash;
 
@@ -52,7 +55,6 @@ function createToken(user) {
 	const payload = {
 		subject: user.id,
 		username: user.username,
-		department: user.department,
 	};
 	const secret = constants.jwtSecret;
 	const options = {
