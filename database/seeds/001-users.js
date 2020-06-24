@@ -3,9 +3,9 @@ exports.seed = function (knex) {
 		.del()
 		.then(function () {
 			return knex('users').insert([
-				{ id: 1, username: 'name1', password: 'test' },
-				{ id: 2, username: 'name2', password: 'test' },
-				{ id: 3, username: 'name3', password: 'test' },
+				{ id: 99, username: 'name1', password: 'test' },
+				{ id: 100, username: 'name2', password: 'test' },
+				{ id: 101, username: 'name3', password: 'test' },
 			]);
 		});
 };
