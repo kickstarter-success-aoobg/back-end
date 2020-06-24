@@ -9,7 +9,9 @@ router.get('/users/:id', async (req, res) => {
 		const allCampaigns = await Model.getByUserID(userId);
 
 		if (allCampaigns.length) {
-			res.status(200).json(allCampaigns);
+			res
+				.status(200)
+				.json({ message: 'Campaigns Loaded', campaigns: allCampaigns });
 		} else {
 			res
 				.status(404)
