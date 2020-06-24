@@ -1,13 +1,13 @@
 const express = require('express');
 // database access using knex
-const db = require('../database/dbConfig.js');
+const Model = require('./campaign-model');
 const router = express.Router();
 
 router.get('/users/:id', async (req, res) => {
+	const userId = req.params.id;
 	try {
-		const allCampaigns = await db('campaigns').where({
-			user_id: req.params.id,
-		});
+		const allCampaigns = await Model.getByUserID(userId);
+
 		if (allCampaigns.length) {
 			res.status(200).json(allCampaigns);
 		} else {
@@ -24,9 +24,7 @@ router.get('/users/:id', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
 	try {
-		const foundCampaign = await db('campaigns')
-			.where({ id: Number(req.params.id) })
-			.first();
+		const foundCampaign = await Model.getByCampaignID(req.params.id);
 		if (foundCampaign) {
 			res.status(200).json(foundCampaign);
 		} else {
@@ -47,11 +45,9 @@ router.post('/', async (req, res) => {
 
 	if (isValid(post)) {
 		try {
-			const [newCampaignId] = await db('campaigns')
-				.returning('id')
-				.insert(campaignObj);
+			const [newCampaignId] = await Model.addCampaign(campaignObj);
 			if (newCampaignId) {
-				const newCampaign = await db('campaigns').where({ id: newCampaignId });
+				const newCampaign = await Model.getByCampaignID(newCampaignId);
 				if (newCampaign) {
 					res.status(201).json(newCampaign);
 				} else {
@@ -87,25 +83,24 @@ router.put('/:id', async (req, res) => {
 
 	if (isValid(post)) {
 		try {
-			const [foundCampaign] = await db('campaigns').where({ id: campaignId });
+			const foundCampaign = await Model.getByCampaignID(campaignId);
 			if (!foundCampaign) {
 				return res
 					.status(404)
 					.json({ message: 'No campaign found with that id' });
 			}
 			if (Number(foundCampaign.id)) {
-				const updatedCampaignId = await db('campaigns')
-					.where({ id: campaignId })
-					.returning('id')
-					.update(campaignObj);
+				const updatedCampaignId = await Model.editCampaign(
+					campaignId,
+					campaignObj
+				);
 				if (updatedCampaignId) {
-					const updatedCampaign = await db('campaigns').where({
-						id: updatedCampaignId,
-					});
+					const updatedCampaign = await Model.getByCampaignID(foundCampaign.id);
 					if (updatedCampaign) {
-						res
-							.status(200)
-							.json({ id: updatedCampaign.id, message: 'updated campaign' });
+						res.status(200).json({
+							message: 'updated campaign',
+							campaign: updatedCampaign,
+						});
 					} else {
 						res
 							.status(400)
@@ -134,17 +129,14 @@ router.delete('/:id', async (req, res) => {
 	const campaignId = Number(req.params.id);
 
 	try {
-		const [foundCampaign] = await db('campaigns').where({ id: campaignId });
+		const foundCampaign = await Model.getByCampaignID(campaignId);
 		if (!foundCampaign) {
 			return res
 				.status(404)
 				.json({ message: 'No campaign found with that id' });
 		}
 		if (Number(foundCampaign.id)) {
-			const deletedCampaign = await db('campaigns')
-				.where({ id: campaignId })
-				.returning('id')
-				.del();
+			const deletedCampaign = await Model.removeCampaign(campaignId);
 			if (deletedCampaign) {
 				res.status(200).json({ message: `Campaign deleted` });
 			} else {
