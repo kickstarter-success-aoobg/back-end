@@ -1,42 +1,33 @@
-// const db = require('../database/dbConfig');
+const db = require('../database/dbConfig');
 
-// module.exports = {
-// 	add,
-// 	edit,
-// 	remove,
-// 	findAll,
-// 	findByUserId,
-// };
+module.exports = {
+	getByUserID,
+	getByCampaignID,
+	addCampaign,
+	editCampaign,
+	removeCampaign,
+};
 
-// function findAll() {
-// 	return db('campaigns').select(
-// 		'name',
-// 		'description',
-// 		'campaign_length',
-// 		'category',
-// 		'monetary_goal',
-// 		'success_prediction'
-// 	);
-// }
+function getByUserID(id) {
+	return db('campaigns').where({
+		user_id: id,
+	});
+}
 
-// function findByUserId(id) {
-// 	return db('users')
-// 		.join('campaigns', 'users.id', 'campaigns.user_id')
-// 		.select(
-// 			'campaigns.name',
-// 			'campaigns.description',
-// 			'campaigns.campaign_length',
-// 			'campaigns.category',
-// 			'campaigns.monetary_goal',
-// 			'campaigns.success_prediction'
-// 		)
-// 		.where('campaigns.user_id', id);
-// }
+function getByCampaignID(id) {
+	return db('campaigns')
+		.where({ id: Number(id) })
+		.first();
+}
 
-// async function add(campaign) {
-// 	return db('campaigns').insert(campaign, 'id');
-// }
+function addCampaign(newCampaign) {
+	return db('campaigns').returning('id').insert(newCampaign);
+}
 
-// async function remove(campaign_id) {
-// 	return db('campaigns').where;
-// }
+function editCampaign(id, object) {
+	return db('campaigns').where({ id: id }).returning('id').update(object);
+}
+
+function removeCampaign(id) {
+	return db('campaigns').where({ id: id }).returning('id').del();
+}
