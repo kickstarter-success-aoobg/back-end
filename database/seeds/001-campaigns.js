@@ -5,7 +5,7 @@ exports.seed = function (knex) {
 			return knex('campaigns').insert([
 				{
 					id: 1,
-					user_id: 1,
+					user_id: 99,
 					name: 'KickStarter Project 1',
 					description: 'Sample Description',
 					campaign_length: 45,
@@ -15,7 +15,7 @@ exports.seed = function (knex) {
 				},
 				{
 					id: 2,
-					user_id: 2,
+					user_id: 100,
 					name: 'KickStarter Project 2',
 					description: 'Sample Description',
 					campaign_length: 60,
@@ -25,7 +25,7 @@ exports.seed = function (knex) {
 				},
 				{
 					id: 3,
-					user_id: 3,
+					user_id: 101,
 					name: 'KickStarter Project 3',
 					description: 'Sample Description',
 					campaign_length: 20,
@@ -35,7 +35,7 @@ exports.seed = function (knex) {
 				},
 				{
 					id: 4,
-					user_id: 1,
+					user_id: 100,
 					name: 'KickStarter Project 4',
 					description: 'Sample Description',
 					campaign_length: 50,
