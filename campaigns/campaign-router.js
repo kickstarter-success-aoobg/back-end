@@ -75,7 +75,6 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
 	const campaignId = Number(req.params.id);
-	// const userId = Number(req.user.id);
 
 	const post = req.body;
 
